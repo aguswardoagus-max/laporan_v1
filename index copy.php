@@ -262,7 +262,7 @@ EOD;
 *A. KEGIATAN PATROLI SIBER*
 
 {$isiPatroliLandy}
-*B.UPAYA*
+*C.UPAYA*
 
 1.Melakukan pemantauan terhadap akun yang menyebarkan berita atau isu yang menyudutkan pemerintahan.
 

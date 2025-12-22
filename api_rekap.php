@@ -435,7 +435,7 @@ try {
 
 *B. HASIL PATROLI SIBER*
 
-{$isiPatroliBencana}*B.UPAYA*
+{$isiPatroliBencana}*C.UPAYA*
 
 1. Melakukan upaya RAS dan melakukan Kontra narasi melalui kolom komentar.
 
@@ -443,7 +443,7 @@ try {
 
 3. Melakukan profiling terhadap pemilik akun, afiliasi akun, dst.
 
-*C. DOKUMENTASI LAPORAN (MATRIK AKUN DAN PROFILLING).*
+*D. DOKUMENTASI LAPORAN (MATRIK AKUN DAN PROFILLING).*
 
 Nilai : Ambon-1
 DUMP.

@@ -533,7 +533,7 @@ EOD;
 *B. KEGIATAN PATROLI SIBER*
 
 {$isiPatroliLandy}
-*B.UPAYA*
+*C.UPAYA*
 
 1.Melakukan pemantauan terhadap akun yang menyebarkan berita atau isu yang menyudutkan pemerintahan.
 
@@ -889,7 +889,7 @@ EOD;
 
 *B. HASIL PATROLI SIBER*
 
-{$isiPatroliBencana}*B.UPAYA*
+{$isiPatroliBencana}*C.UPAYA*
 
 1. Melakukan upaya RAS dan melakukan Kontra narasi melalui kolom komentar.
 
@@ -897,7 +897,7 @@ EOD;
 
 3. Melakukan profiling terhadap pemilik akun, afiliasi akun, dst.
 
-*C. DOKUMENTASI LAPORAN (MATRIK AKUN DAN PROFILLING).*
+*D. DOKUMENTASI LAPORAN (MATRIK AKUN DAN PROFILLING).*
 
 Nilai : Ambon-1
 DUMP.

@@ -332,20 +332,27 @@ try {
         }
 
         // Save document
-        // Clean judul: remove special characters, keep only alphanumeric and spaces
-        $judulClean = preg_replace('/[^a-zA-Z0-9\s]/', '', $judul);
+        // Clean judul: keep alphanumeric, spaces, and dash (-)
+        $judulClean = preg_replace('/[^a-zA-Z0-9\s\-]/', '', $judul);
         // Convert to uppercase and normalize spaces (multiple spaces to single space)
         $judulClean = strtoupper($judulClean);
         $judulClean = preg_replace('/\s+/', ' ', $judulClean); // Replace multiple spaces with single space
         $judulClean = trim($judulClean);
+        
+        // Remove duplicate "ENGAGEMENT" if judul already starts with it (setelah di-uppercase)
+        if (strpos($judulClean, 'ENGAGEMENT ') === 0) {
+            $judulClean = substr($judulClean, 12); // Remove "ENGAGEMENT " (11 chars + 1 space)
+            $judulClean = trim($judulClean);
+        }
+        
         $judulClean = substr($judulClean, 0, 100); // Limit length
         
-        // Format tanggal untuk UPDATE (format: "23 Desember 2025")
-        $tanggalUpdate = formatTanggalIndonesia($tanggal);
+        // Format tanggal untuk UPDATE (format: "23 DESEMBER 2025" - semua kapital)
+        $tanggalUpdate = strtoupper(formatTanggalIndonesia($tanggal));
         
-        // Nama file: LAPORAN ENGAGEMENT [JUDUL] [TANGGAL] UPDATE [TANGGAL INDONESIA].docx
-        // Tanpa underscore, semua uppercase, dengan UPDATE di akhir
-        $outputFileName = 'LAPORAN ENGAGEMENT ' . $judulClean . ' ' . $tanggalNamaFile . ' UPDATE ' . $tanggalUpdate . '.docx';
+        // Nama file: LAPORAN ENGAGEMENT [JUDUL] UPDATE [TANGGAL INDONESIA KAPITAL].docx
+        // Tanpa underscore, tanpa tanggal format 23122025, semua uppercase, dengan UPDATE di akhir
+        $outputFileName = 'LAPORAN ENGAGEMENT ' . $judulClean . ' UPDATE ' . $tanggalUpdate . '.docx';
         $outputPath = $hasilDir . '/' . $outputFileName;
         
         $templateProcessor->saveAs($outputPath);

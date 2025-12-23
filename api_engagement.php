@@ -333,19 +333,32 @@ try {
 
         // Save document
         // Clean judul: keep alphanumeric, spaces, and dash (-)
-        $judulClean = preg_replace('/[^a-zA-Z0-9\s\-]/', '', $judul);
-        // Convert to uppercase and normalize spaces (multiple spaces to single space)
-        $judulClean = strtoupper($judulClean);
-        $judulClean = preg_replace('/\s+/', ' ', $judulClean); // Replace multiple spaces with single space
+        // Hanya hapus karakter khusus, pertahankan semua huruf, angka, spasi, dan dash
+        // PASTIKAN TIDAK ADA KARAKTER YANG HILANG - hanya hapus karakter yang benar-benar tidak diinginkan
+        $judulClean = preg_replace('/[^a-zA-Z0-9\s\-]/u', '', $judul);
+        
+        // Convert to uppercase - PASTIKAN SEMUA KARAKTER TETAP ADA
+        $judulClean = mb_strtoupper($judulClean, 'UTF-8');
+        
+        // Normalize spaces (multiple spaces to single space)
+        $judulClean = preg_replace('/\s+/u', ' ', $judulClean);
         $judulClean = trim($judulClean);
         
-        // Remove duplicate "ENGAGEMENT" if judul already starts with it (setelah di-uppercase)
-        if (strpos($judulClean, 'ENGAGEMENT ') === 0) {
-            $judulClean = substr($judulClean, 12); // Remove "ENGAGEMENT " (11 chars + 1 space)
+        // Remove duplicate "ENGAGEMENT" di awal judul jika ada (setelah di-uppercase)
+        // PASTIKAN TIDAK MENGHAPUS KARAKTER LAIN - hanya hapus jika benar-benar dimulai dengan "ENGAGEMENT "
+        // Gunakan cara yang lebih eksplisit dan aman
+        $prefixToRemove = 'ENGAGEMENT ';
+        $prefixLength = mb_strlen($prefixToRemove, 'UTF-8');
+        if (mb_substr($judulClean, 0, $prefixLength, 'UTF-8') === $prefixToRemove) {
+            $judulClean = mb_substr($judulClean, $prefixLength, null, 'UTF-8');
             $judulClean = trim($judulClean);
         }
         
-        $judulClean = substr($judulClean, 0, 100); // Limit length
+        // Limit length - pastikan tidak memotong di tengah kata jika mungkin
+        if (mb_strlen($judulClean, 'UTF-8') > 100) {
+            $judulClean = mb_substr($judulClean, 0, 100, 'UTF-8');
+            $judulClean = trim($judulClean);
+        }
         
         // Format tanggal untuk UPDATE (format: "23 DESEMBER 2025" - semua kapital)
         $tanggalUpdate = strtoupper(formatTanggalIndonesia($tanggal));

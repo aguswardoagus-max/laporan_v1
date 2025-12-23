@@ -159,13 +159,49 @@ try {
         }
     }
     
-    // Assign evidence from link to all accounts in that link
-    $evidenceImages = [];
+    // Assign evidence from link to accounts - each account gets different evidence
+    // Group accounts by link index to distribute evidence properly
+    $accountsByLink = [];
     $totalAccounts = count($namaAkun);
     for ($i = 0; $i < $totalAccounts; $i++) {
         $linkIdx = isset($linkIndexes[$i]) ? (int)$linkIndexes[$i] : ($i % count($links));
         $linkIdx = max(0, min($linkIdx, count($links) - 1));
-        $evidenceImages[$i] = $evidenceByLink[$linkIdx] ?? [];
+        if (!isset($accountsByLink[$linkIdx])) {
+            $accountsByLink[$linkIdx] = [];
+        }
+        $accountsByLink[$linkIdx][] = $i; // Store account index with original order
+    }
+    
+    // Assign evidence to each account based on their position in the link
+    // Each account gets ONE evidence image based on their order (first account = first evidence, etc.)
+    $evidenceImages = [];
+    foreach ($accountsByLink as $linkIdx => $accountIndices) {
+        $linkEvidence = $evidenceByLink[$linkIdx] ?? [];
+        $evidenceCount = count($linkEvidence);
+        $accountCount = count($accountIndices);
+        
+        if ($evidenceCount > 0) {
+            // Distribute evidence: each account gets one evidence based on their position
+            // Account at position 0 gets evidence[0], position 1 gets evidence[1], etc.
+            // If more accounts than evidence, cycle through evidence (account gets evidence[position % evidenceCount])
+            foreach ($accountIndices as $position => $accountIndex) {
+                // Each account gets ONE evidence image based on their position
+                $evidenceIndex = $position % $evidenceCount; // Cycle if more accounts than evidence
+                $evidenceImages[$accountIndex] = [$linkEvidence[$evidenceIndex]];
+            }
+        } else {
+            // No evidence for this link
+            foreach ($accountIndices as $accountIndex) {
+                $evidenceImages[$accountIndex] = [];
+            }
+        }
+    }
+    
+    // Ensure all accounts have evidence array (even if empty)
+    for ($i = 0; $i < $totalAccounts; $i++) {
+        if (!isset($evidenceImages[$i])) {
+            $evidenceImages[$i] = [];
+        }
     }
 
     // Prepare data for report

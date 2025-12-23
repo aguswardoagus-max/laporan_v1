@@ -332,10 +332,20 @@ try {
         }
 
         // Save document
+        // Clean judul: remove special characters, keep only alphanumeric and spaces
         $judulClean = preg_replace('/[^a-zA-Z0-9\s]/', '', $judul);
-        $judulClean = preg_replace('/\s+/', '_', $judulClean); // Replace spaces with underscore
+        // Convert to uppercase and normalize spaces (multiple spaces to single space)
+        $judulClean = strtoupper($judulClean);
+        $judulClean = preg_replace('/\s+/', ' ', $judulClean); // Replace multiple spaces with single space
+        $judulClean = trim($judulClean);
         $judulClean = substr($judulClean, 0, 100); // Limit length
-        $outputFileName = 'LAPORAN_ENGAGEMENT_' . $judulClean . '_' . $tanggalNamaFile . '.docx';
+        
+        // Format tanggal untuk UPDATE (format: "23 Desember 2025")
+        $tanggalUpdate = formatTanggalIndonesia($tanggal);
+        
+        // Nama file: LAPORAN ENGAGEMENT [JUDUL] [TANGGAL] UPDATE [TANGGAL INDONESIA].docx
+        // Tanpa underscore, semua uppercase, dengan UPDATE di akhir
+        $outputFileName = 'LAPORAN ENGAGEMENT ' . $judulClean . ' ' . $tanggalNamaFile . ' UPDATE ' . $tanggalUpdate . '.docx';
         $outputPath = $hasilDir . '/' . $outputFileName;
         
         $templateProcessor->saveAs($outputPath);
